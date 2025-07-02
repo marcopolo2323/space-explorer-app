@@ -18,6 +18,9 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'gamecontroller.fill': 'gamepad',
+  'questionmark.circle.fill': 'quiz',
+  'globe.americas.fill': 'public',
 } as IconMapping;
 
 /**
