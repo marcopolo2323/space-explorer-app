@@ -1,75 +1,85 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import MenuInicio from "@/components/QuizJuego/Menuinicio";
+import SeleccionNivel from "@/components/QuizJuego/seleccionnivel";
+import SeleccionNivelPvp from "@/components/QuizJuego/SeleccionNivelPvP";
+import Quiz from "@/components/QuizJuego/Quiz";
+import PvPQuiz from "@/components/QuizJuego/Quizversus";
 
-export default function HomeScreen() {
+type Pantalla = "menu" | "seleccion-nivel" | "quiz" | "seleccion-nivel-pvp" | "pvp";
+type Nivel = "fácil" | "medio" | "difícil" | "hard";
+
+export default function App() {
+  const [pantalla, setPantalla] = useState<Pantalla>("menu");
+  const [nivelSeleccionado, setNivelSeleccionado] = useState<Nivel | null>(null);
+
+  // --------- MANEJADORES -----------
+
+  const iniciarSolitario = () => {
+    setPantalla("seleccion-nivel");
+  };
+
+  const iniciarPvp = () => {
+    setPantalla("seleccion-nivel-pvp");
+  };
+
+  const manejarNivelSolitario = (nivel: Nivel) => {
+    setNivelSeleccionado(nivel);
+    setPantalla("quiz");
+  };
+
+  const manejarNivelPvp = (nivel: Nivel) => {
+    setNivelSeleccionado(nivel);
+    setPantalla("pvp");
+  };
+
+  const regresarAlMenu = () => {
+    setPantalla("menu");
+    setNivelSeleccionado(null);
+  };
+
+  // --------- RENDER -----------
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <SafeAreaView style={styles.container}>
+      {pantalla === "menu" && (
+        <MenuInicio onIniciar={iniciarSolitario} onIniciarPvp={iniciarPvp} />
+      )}
+
+      {pantalla === "seleccion-nivel" && (
+        <SeleccionNivel
+          onElegirNivel={manejarNivelSolitario}
+          onRegresar={regresarAlMenu}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      )}
+
+      {pantalla === "seleccion-nivel-pvp" && (
+        <SeleccionNivelPvp
+          onSeleccionarNivel={manejarNivelPvp}
+          onRegresar={regresarAlMenu}
+        />
+      )}
+
+      {pantalla === "quiz" && nivelSeleccionado && (
+        <Quiz
+          nivel={nivelSeleccionado}
+          onRegresar={regresarAlMenu}
+        />
+      )}
+
+      {pantalla === "pvp" && nivelSeleccionado && (
+        <PvPQuiz
+          nivel={nivelSeleccionado}
+          onRegresar={regresarAlMenu}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  container: {
+    flex: 1,
   },
 });
