@@ -5,31 +5,30 @@ import {
   TouchableOpacity,
   StyleSheet,
   ImageBackground,
-  Dimensions,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-
-export default function SeleccionNivel({ onElegirNivel, onRegresar }) {
+export default function SeleccionNivelPvP({ onSeleccionarNivel, onRegresar }) {
   const niveles = ['fácil', 'medio', 'difícil', 'hard'];
 
   return (
     <ImageBackground
-      source={require('../../assets/Img/universo.jpg')}
+      source={require('../../../assets/Img/universo.jpg')}
       style={styles.fondo}
       resizeMode="cover"
     >
-      <View style={styles.card}>
+      <View style={styles.container}>
         <TouchableOpacity style={styles.botonRegresar} onPress={onRegresar}>
-          <Text style={styles.textoRegresar}>⟵ Regresar</Text>
+          <Text style={styles.textoRegresar}>← Volver</Text>
         </TouchableOpacity>
 
-        <Text style={styles.titulo}>Selecciona un Nivel</Text>
+        <Text style={styles.titulo}>🚀 Modo 1 vs 1</Text>
+        <Text style={styles.subtitulo}>Selecciona el nivel para jugar</Text>
+
         {niveles.map((nivel) => (
           <TouchableOpacity
             key={nivel}
             style={styles.boton}
-            onPress={() => onElegirNivel(nivel)}
+            onPress={() => onSeleccionarNivel(nivel)}
           >
             <Text style={styles.texto}>{nivel.toUpperCase()}</Text>
           </TouchableOpacity>
@@ -42,47 +41,59 @@ export default function SeleccionNivel({ onElegirNivel, onRegresar }) {
 const styles = StyleSheet.create({
   fondo: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  card: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  container: {
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     padding: 30,
     borderRadius: 20,
-    width: width * 0.85,
+    width: '85%',
     alignItems: 'center',
   },
   titulo: {
-    fontSize: 24,
-    color: 'white',
-    marginBottom: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  subtitulo: {
+    fontSize: 16,
+    color: '#ccc',
+    marginBottom: 24,
+    textAlign: 'center',
   },
   boton: {
     backgroundColor: '#5c2fd4',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 30,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
     marginVertical: 8,
     width: '100%',
     alignItems: 'center',
+    shadowColor: '#fff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   texto: {
     color: 'white',
     fontSize: 18,
+    fontWeight: '600',
   },
   botonRegresar: {
     alignSelf: 'flex-start',
-    marginBottom: 10,
     backgroundColor: '#444',
     paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 20,
+    marginBottom: 12,
   },
   textoRegresar: {
-    color: 'white',
-    fontSize: 14,
+    color: '#ccc',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

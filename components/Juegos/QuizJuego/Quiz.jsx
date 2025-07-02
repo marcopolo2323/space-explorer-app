@@ -8,10 +8,10 @@ import {
   Dimensions,
 } from 'react-native';
 
-import preguntasFacil from '@/components/QuizJuego/Preguntas/facil';
-import preguntasMedio from '@/components/QuizJuego/Preguntas/normal';
-import preguntasDificil from '@/components/QuizJuego/Preguntas/dificil';
-import preguntasHard from '@/components/QuizJuego/Preguntas/hard';
+import preguntasFacil from '@/components/Juegos/QuizJuego/Preguntas/facil';
+import preguntasMedio from '@/components/Juegos/QuizJuego/Preguntas/normal';
+import preguntasDificil from '@/components/Juegos/QuizJuego/Preguntas/dificil';
+import preguntasHard from '@/components/Juegos/QuizJuego/Preguntas/hard';
 
 const { width, height } = Dimensions.get('window');
 
@@ -99,7 +99,7 @@ export default function Quiz({ nivel, onRegresar }) {
 
   return (
     <ImageBackground
-      source={require('../../assets/Img/universo.jpg')}
+      source={require('../../../assets/Img/universo.jpg')}
       style={styles.fondo}
       resizeMode="cover"
     >

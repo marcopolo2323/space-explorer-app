@@ -6,10 +6,10 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-import preguntasFacil from "../QuizJuego/Preguntas/facil";
-import preguntasMedio from "../QuizJuego/Preguntas/normal";
-import preguntasDificil from "../QuizJuego/Preguntas/dificil";
-import preguntasHard from "../QuizJuego/Preguntas/hard";
+import preguntasFacil from '@/components/Juegos/QuizJuego/Preguntas/facil';
+import preguntasMedio from '@/components/Juegos/QuizJuego/Preguntas/normal';
+import preguntasDificil from '@/components/Juegos/QuizJuego/Preguntas/dificil';
+import preguntasHard from '@/components/Juegos/QuizJuego/Preguntas/hard';
 
 export default function PvPQuiz({ nivel, onRegresar }) {
   const [preguntas, setPreguntas] = useState([]);
@@ -39,7 +39,6 @@ export default function PvPQuiz({ nivel, onRegresar }) {
         seleccionadas = preguntasFacil;
     }
 
-    // Tomamos 10 preguntas aleatorias del nivel
     const barajadas = [...seleccionadas].sort(() => 0.5 - Math.random()).slice(0, 10);
     setPreguntas(barajadas);
   }, [nivel]);
@@ -69,7 +68,9 @@ export default function PvPQuiz({ nivel, onRegresar }) {
     setPuntajeJ1(0);
     setPuntajeJ2(0);
     setTurno(1);
-    setTerminando(false);
+    setTerminado(false);
+    const barajadas = [...preguntas].sort(() => 0.5 - Math.random()).slice(0, 10);
+    setPreguntas(barajadas);
   };
 
   if (preguntas.length === 0) return null;
@@ -78,11 +79,16 @@ export default function PvPQuiz({ nivel, onRegresar }) {
 
   return (
     <ImageBackground
-      source={require("../../assets/Img/universo.jpg")}
+      source={require("../../../assets/Img/universo.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
       <View style={styles.tarjeta}>
+        {/* Botón de regresar - igual que en el selector */}
+        <TouchableOpacity style={styles.botonRegresar} onPress={onRegresar}>
+          <Text style={styles.textoRegresar}>← Volver</Text>
+        </TouchableOpacity>
+
         {terminado ? (
           <>
             <Text style={styles.titulo}>¡Juego Terminado!</Text>
@@ -95,9 +101,17 @@ export default function PvPQuiz({ nivel, onRegresar }) {
                 ? "🏆 Gana Jugador 2"
                 : "🤝 ¡Empate!"}
             </Text>
-            <TouchableOpacity style={styles.boton} onPress={onRegresar}>
-              <Text style={styles.textoOpcion}>Regresar</Text>
-            </TouchableOpacity>
+            <View style={styles.botonesFinales}>
+              <TouchableOpacity style={styles.boton} onPress={reiniciar}>
+                <Text style={styles.textoOpcion}>Jugar de nuevo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.boton, styles.botonSecundario]} 
+                onPress={onRegresar}
+              >
+                <Text style={styles.textoOpcion}>Cambiar nivel</Text>
+              </TouchableOpacity>
+            </View>
           </>
         ) : (
           <>
@@ -167,6 +181,9 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+  botonSecundario: {
+    backgroundColor: "#444",
+  },
   textoOpcion: {
     color: "white",
     fontSize: 16,
@@ -176,5 +193,22 @@ const styles = StyleSheet.create({
   },
   incorrecta: {
     backgroundColor: "#dc3545",
+  },
+  botonRegresar: {
+    alignSelf: "flex-start",
+    backgroundColor: "#444",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 12,
+  },
+  textoRegresar: {
+    color: "#ccc",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  botonesFinales: {
+    width: "100%",
+    marginTop: 10,
   },
 });
