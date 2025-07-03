@@ -1,5 +1,5 @@
-// app/index.tsx (pantalla de inicio)
-import React from 'react';
+// app/index.tsx (pantalla de inicio con API de NASA)
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,110 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
+// Configura tu API key de NASA aquí
+const NASA_API_KEY = 'gRVZ1ecthz3ERGd2looBcgbrZp4h7lp20q2Zifpr'; // Reemplaza con tu API key real
+
 export default function HomeScreen() {
+  const [apodData, setApodData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState('');
+
+  // Función para obtener la fecha y hora actual formateada
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear().toString().slice(-2);
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
+  // Función para obtener datos de APOD (Astronomy Picture of the Day)
+  const fetchAPODData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Error al obtener datos de NASA');
+      }
+      
+      const data = await response.json();
+      setApodData(data);
+    } catch (error) {
+      console.error('Error fetching NASA APOD:', error);
+      Alert.alert(
+        'Error',
+        'No se pudieron cargar los datos de NASA. Usando contenido de ejemplo.',
+        [{ text: 'OK' }]
+      );
+      
+      // Datos de fallback
+      setApodData({
+        title: 'Nebulosa de Orión',
+        explanation: 'Una de las nebulosas más brillantes y fotografiadas del cielo nocturno, ubicada en la constelación de Orión. Esta región de formación estelar activa contiene estrellas jóvenes y calientes que iluminan el gas y polvo circundante.',
+        url: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=250&fit=crop',
+        date: new Date().toISOString().split('T')[0],
+        media_type: 'image'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setCurrentDate(getCurrentDateTime());
+    fetchAPODData();
+    
+    // Actualizar la hora cada minuto
+    const interval = setInterval(() => {
+      setCurrentDate(getCurrentDateTime());
+    }, 60000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   const handleStartExploration = () => {
     router.push('/(tabs)/planetas');
   };
+
+  const handleRefreshData = () => {
+    fetchAPODData();
+  };
+
+  // Función para truncar texto largo
+  const truncateText = (text, maxLength = 200) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength).trim() + '...';
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#0f0f23" />
+        <LinearGradient
+          colors={['#0f0f23', '#1a1a2e', '#16213e']}
+          style={[styles.background, styles.centered]}
+        >
+          <ActivityIndicator size="large" color="#7b68ee" />
+          <Text style={styles.loadingText}>Cargando datos de NASA...</Text>
+        </LinearGradient>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -31,11 +125,15 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <View style={styles.logoContainer}>
+            <TouchableOpacity 
+              style={styles.logoContainer}
+              onPress={handleRefreshData}
+              activeOpacity={0.7}
+            >
               <View style={styles.planetIcon} />
               <Text style={styles.appName}>INKANAZCA</Text>
-            </View>
-            <Text style={styles.dateTime}>27/06/25 16:22</Text>
+            </TouchableOpacity>
+            <Text style={styles.dateTime}>{currentDate}</Text>
           </View>
         </View>
 
@@ -43,34 +141,51 @@ export default function HomeScreen() {
         <View style={styles.mainContent}>
           <Text style={styles.mainTitle}>EXPLORA EL UNIVERSO</Text>
           
-          {/* Nebula Image Container */}
+          {/* NASA APOD Image Container */}
           <View style={styles.imageContainer}>
-            <ImageBackground
-              source={{ uri: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=250&fit=crop' }}
-              style={styles.nebulaImage}
-              imageStyle={styles.imageStyle}
-            >
-              <LinearGradient
-                colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.3)']}
-                style={styles.imageOverlay}
-              />
-            </ImageBackground>
+            {apodData && apodData.media_type === 'image' && (
+              <ImageBackground
+                source={{ uri: apodData.url }}
+                style={styles.nebulaImage}
+                imageStyle={styles.imageStyle}
+              >
+                <LinearGradient
+                  colors={['rgba(0,0,0,0.3)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.3)']}
+                  style={styles.imageOverlay}
+                />
+              </ImageBackground>
+            )}
             
             {/* Image Label */}
             <View style={styles.imageLabel}>
-              <Text style={styles.imageLabelText}>nebulosa de oreon 2015</Text>
+              <Text style={styles.imageLabelText}>
+                {apodData && apodData.title ? apodData.title.toLowerCase() : 'imagen del día de nasa'}
+              </Text>
+              <Text style={styles.imageDateText}>NASA APOD - {apodData && apodData.date ? apodData.date : ''}</Text>
             </View>
           </View>
 
-          {/* Lorem Ipsum Text */}
+          {/* NASA Description Text */}
           <View style={styles.descriptionContainer}>
+            <Text style={styles.descriptionTitle}>Descripción NASA:</Text>
             <Text style={styles.descriptionText}>
-              Lorem ipsum ahfddnflnadf{'\n'}
-              adfjh hadlfj lajdhf añldjh{'\n'}
-              aldhf ljhad frlij aj dh{'\n'}
-              jhlñsdj frlj ñahdñ ladhf ldj{'\n'}
-              adñlfdl lk jdñd fj
+              {apodData && apodData.explanation 
+                ? truncateText(apodData.explanation)
+                : 'Cargando descripción de NASA...'
+              }
             </Text>
+            
+            {apodData && apodData.explanation && apodData.explanation.length > 200 && (
+              <TouchableOpacity onPress={() => {
+                Alert.alert(
+                  apodData.title,
+                  apodData.explanation,
+                  [{ text: 'Cerrar' }]
+                );
+              }}>
+                <Text style={styles.readMoreText}>Leer más...</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Start Button */}
@@ -88,11 +203,16 @@ export default function HomeScreen() {
               <Text style={styles.buttonText}>COMENZAR EXPLORACIÓN</Text>
             </LinearGradient>
           </TouchableOpacity>
+
+          {/* NASA Attribution */}
+          <Text style={styles.nasaAttribution}>
+            Datos proporcionados por NASA API
+          </Text>
         </View>
 
         {/* Decorative Stars */}
         <View style={styles.starsContainer}>
-          {[...Array(20)].map((_, index) => (
+          {[...Array(30)].map((_, index) => (
             <View
               key={index}
               style={[
@@ -101,6 +221,9 @@ export default function HomeScreen() {
                   top: Math.random() * height,
                   left: Math.random() * width,
                   opacity: Math.random() * 0.8 + 0.2,
+                  transform: [
+                    { scale: Math.random() * 1.5 + 0.5 }
+                  ]
                 }
               ]}
             />
@@ -117,6 +240,10 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
+  },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     paddingTop: 50,
@@ -150,6 +277,12 @@ const styles = StyleSheet.create({
     color: '#cccccc',
     fontSize: 14,
   },
+  loadingText: {
+    color: '#ffffff',
+    fontSize: 16,
+    marginTop: 20,
+    textAlign: 'center',
+  },
   mainContent: {
     flex: 1,
     paddingHorizontal: 20,
@@ -165,11 +298,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 25,
   },
   nebulaImage: {
-    width: width * 0.8,
-    height: 200,
+    width: width * 0.85,
+    height: 220,
     justifyContent: 'flex-end',
   },
   imageStyle: {
@@ -180,27 +313,47 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   imageLabel: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 20,
-    marginTop: -25,
+    marginTop: -30,
     zIndex: 2,
+    alignItems: 'center',
   },
   imageLabelText: {
     color: '#ffffff',
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  imageDateText: {
+    color: '#7b68ee',
+    fontSize: 12,
+    marginTop: 2,
+    textAlign: 'center',
   },
   descriptionContainer: {
-    marginBottom: 40,
+    marginBottom: 30,
     paddingHorizontal: 10,
+  },
+  descriptionTitle: {
+    color: '#7b68ee',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
   descriptionText: {
     color: '#cccccc',
-    fontSize: 16,
-    lineHeight: 24,
-    textAlign: 'left',
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'justify',
+  },
+  readMoreText: {
+    color: '#4a6fa5',
+    fontSize: 14,
+    marginTop: 5,
+    textDecorationLine: 'underline',
   },
   startButton: {
     alignSelf: 'center',
@@ -211,6 +364,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+    marginBottom: 15,
   },
   buttonGradient: {
     paddingHorizontal: 40,
@@ -222,6 +376,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     letterSpacing: 1,
+  },
+  nasaAttribution: {
+    color: '#888888',
+    fontSize: 12,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   starsContainer: {
     position: 'absolute',
