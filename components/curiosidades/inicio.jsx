@@ -8,24 +8,47 @@ import {
   StatusBar
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router'; // ← Cambia esto
+import { useRouter } from 'expo-router';
 import CuriosidadesCard from './curiosidades_card';
 import { curiosidadesData } from './curiosidades_data';
 
-const Inicio = () => { // ← Elimina { navigation }
-  const router = useRouter(); // ← Usa useRouter en lugar de navigation
+const Inicio = () => {
+  const router = useRouter();
 
   const handleCardPress = (item) => {
-    // Mapea los nombres de pantalla a rutas de Expo Router
-    const routeMap = {
-      'CuriosityFotos': '/curiosidades/curiosityfotos',
-      'Asteroides': '/curiosidades/asteroides', 
-      'EpicImages': '/curiosidades/epicimages'
-    };
+    console.log('Intentando navegar a:', item.screenName);
+    console.log('Con título:', item.title);
     
-    const route = routeMap[item.screenName];
-    if (route) {
-      router.push(route); // ← Usa router.push en lugar de navigation.navigate
+    // Como screenName ya tiene la ruta completa, no necesitamos mapeo
+    const route = item.screenName;
+    
+    console.log('✅ Navegando a ruta:', route);
+    
+    try {
+      // Método 1: Usar push con objeto (recomendado)
+      router.push({
+        pathname: route,
+        params: { 
+          title: item.title,
+          id: item.id.toString()
+        }
+      });
+    } catch (error) {
+      console.error('❌ Error con método 1:', error);
+      
+      try {
+        // Método 2: Usar string con query parameters
+        const encodedTitle = encodeURIComponent(item.title);
+        const fullRoute = `${route}?title=${encodedTitle}&id=${item.id}`;
+        console.log('🔄 Intentando ruta alternativa:', fullRoute);
+        router.push(fullRoute);
+      } catch (error2) {
+        console.error('❌ Error con método 2:', error2);
+        
+        // Método 3: Navegación básica sin parámetros
+        console.log('🔄 Usando navegación básica a:', route);
+        router.push(route);
+      }
     }
   };
 
@@ -62,7 +85,6 @@ const Inicio = () => { // ← Elimina { navigation }
   );
 };
 
-// Los estilos permanecen igual
 const styles = StyleSheet.create({
   container: {
     flex: 1,

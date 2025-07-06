@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from "react
 export default function MenuInicio({ onIniciar, onIniciarPvp }) {
   return (
     <ImageBackground
-      source={require("../../assets/Img/universo.jpg")}
+      source={require("../../../assets/Img/universo.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
