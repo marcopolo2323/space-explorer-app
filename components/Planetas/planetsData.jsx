@@ -1,4 +1,3 @@
-// planetsData.jsx
 export const planetsData = [
   {
     id: 1,
@@ -6,6 +5,7 @@ export const planetsData = [
     shortDescription: 'El planeta más cercano al Sol',
     color: '#8C7853',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mercury_in_true_color.jpg/480px-Mercury_in_true_color.jpg',
+    nasaSearchTerm: 'Mercury planet', // Solo agregamos esto
     details: {
       distanceFromSun: '58 millones km',
       diameter: '4,879 km',
@@ -24,6 +24,7 @@ export const planetsData = [
     shortDescription: 'El planeta más caliente',
     color: '#FFC649',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/480px-Venus_from_Mariner_10.jpg',
+    nasaSearchTerm: 'Venus planet',
     details: {
       distanceFromSun: '108 millones km',
       diameter: '12,104 km',
@@ -42,6 +43,7 @@ export const planetsData = [
     shortDescription: 'Nuestro hogar',
     color: '#6B93D6',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/480px-The_Earth_seen_from_Apollo_17.jpg',
+    nasaSearchTerm: 'Earth from space',
     details: {
       distanceFromSun: '150 millones km',
       diameter: '12,756 km',
@@ -60,6 +62,8 @@ export const planetsData = [
     shortDescription: 'El planeta rojo',
     color: '#CD5C5C',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/480px-OSIRIS_Mars_true_color.jpg',
+    nasaSearchTerm: 'Mars planet',
+    hasMarsPhotos: true,
     details: {
       distanceFromSun: '228 millones km',
       diameter: '6,792 km',
@@ -78,6 +82,7 @@ export const planetsData = [
     shortDescription: 'El gigante gaseoso',
     color: '#D8CA9D',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/480px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg',
+    nasaSearchTerm: 'Jupiter planet',
     details: {
       distanceFromSun: '778 millones km',
       diameter: '142,984 km',
@@ -96,6 +101,7 @@ export const planetsData = [
     shortDescription: 'El señor de los anillos',
     color: '#FAD5A5',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/480px-Saturn_during_Equinox.jpg',
+    nasaSearchTerm: 'Saturn planet',
     details: {
       distanceFromSun: '1,432 millones km',
       diameter: '120,536 km',
@@ -114,12 +120,13 @@ export const planetsData = [
     shortDescription: 'El gigante de hielo',
     color: '#4FD0E7',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Uranus2.jpg/480px-Uranus2.jpg',
+    nasaSearchTerm: 'Uranus planet',
     details: {
       distanceFromSun: '2,867 millones km',
       diameter: '51,118 km',
       dayLength: '17.2 horas',
       yearLength: '84 años terrestres',
-      temperature: '-197°C promedio',
+      temperature: '-197°C promedio', 
       moons: '27 conocidas',
       composition: 'Agua, metano y hielo de amoníaco',
       atmosphere: 'Hidrógeno, helio y metano',
@@ -132,6 +139,7 @@ export const planetsData = [
     shortDescription: 'El mundo ventoso',
     color: '#4B70DD',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg/480px-Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg',
+    nasaSearchTerm: 'Neptune planet',
     details: {
       distanceFromSun: '4,515 millones km',
       diameter: '49,528 km',

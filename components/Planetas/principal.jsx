@@ -1,4 +1,4 @@
-// principal.jsx
+// principal.jsx - Versión simplificada solo con datos de planetas
 import React, { useState } from 'react';
 import {
   View,
@@ -6,8 +6,11 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+// Importa tus estilos existentes
 import { styles } from './styles';
+// Importa tus datos actualizados
 import { planetsData } from './planetsData';
+// Importa tus componentes existentes
 import PlanetCard from './planetCard';
 import PlanetModal from './planetModal';
 
@@ -25,11 +28,23 @@ const SolarSystemApp = () => {
     setSelectedPlanet(null);
   };
 
+  // Verificación de seguridad
+  if (!planetsData || !Array.isArray(planetsData) || planetsData.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Error</Text>
+          <Text style={styles.subtitle}>No se pudieron cargar los datos de planetas</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>🌌 Sistema Solar</Text>
-        <Text style={styles.subtitle}>Explora los planetas de nuestro sistema</Text>
+        <Text style={styles.subtitle}>Explora los planetas del sistema solar</Text>
       </View>
       
       <ScrollView
