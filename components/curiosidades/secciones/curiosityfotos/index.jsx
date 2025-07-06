@@ -6,9 +6,10 @@ import {
   SafeAreaView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams } from 'expo-router'; // ← Importa useLocalSearchParams
 
-const CuriosityFotosScreen = ({ route }) => {
-  const { title } = route.params;
+const CuriosityFotosScreen = () => { // ← Elimina { route }
+  const { title } = useLocalSearchParams(); // ← Usa useLocalSearchParams
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,7 +18,7 @@ const CuriosityFotosScreen = ({ route }) => {
         style={styles.background}
       >
         <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{title || 'Curiosity Fotos'}</Text>
           <Text style={styles.subtitle}>
             Aquí se mostrarán las fotos del rover Curiosity
           </Text>
