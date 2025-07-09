@@ -63,10 +63,12 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 5,
+    paddingLeft:20
   },
   planetDescription: {
     fontSize: 14,
     color: '#8E9AAF',
+    paddingLeft:20
   },
   modalOverlay: {
     flex: 1,
@@ -80,6 +82,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor:'trans'
   },
   modalContent: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -114,6 +117,13 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 15,
     marginTop: 10,
+  },
+   planeta: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    alignSelf: 'center',
+    margin:'auto',
   },
   modalTitle: {
     fontSize: 24,
