@@ -6,7 +6,7 @@ export default function SeleccionNivelPvP({ onSeleccionarNivel, onRegresar }) {
 
   return (
     <ImageBackground
-      source={require('../../assets/Img/universo.jpg')}
+      source={require("../../../assets/Img/universo.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >

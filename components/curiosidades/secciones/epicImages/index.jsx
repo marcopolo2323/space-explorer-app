@@ -6,9 +6,10 @@ import {
   SafeAreaView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useLocalSearchParams } from 'expo-router'; // ← Importa useLocalSearchParams
 
-const EpicImagesScreen = ({ route }) => {
-  const { title } = route.params;
+const EpicImagesScreen = () => { // ← Elimina { route }
+  const { title } = useLocalSearchParams(); // ← Usa useLocalSearchParams
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,7 +18,7 @@ const EpicImagesScreen = ({ route }) => {
         style={styles.background}
       >
         <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{title || 'Epic Images'}</Text>
           <Text style={styles.subtitle}>
             Imágenes épicas de la Tierra desde el espacio
           </Text>

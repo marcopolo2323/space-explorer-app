@@ -1,28 +1,42 @@
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 
-import MenuInicio from "@/components/QuizJuego/Menuinicio";
-import SeleccionNivel from "@/components/QuizJuego/seleccionnivel";
-import SeleccionNivelPvp from "@/components/QuizJuego/SeleccionNivelPvP";
-import Quiz from "@/components/QuizJuego/Quiz";
-import PvPQuiz from "@/components/QuizJuego/Quizversus";
+// Componentes Quiz
+import MenuInicio from "@/components/Juegos/QuizJuego/Menuinicio";
+import SeleccionNivel from "@/components/Juegos/QuizJuego/seleccionnivel";
+import SeleccionNivelPvp from "@/components/Juegos/QuizJuego/SeleccionNivelPvP";
+import Quiz from "@/components/Juegos/QuizJuego/Quiz";
+import PvPQuiz from "@/components/Juegos/QuizJuego/Quizversus";
 
-type Pantalla = "menu" | "seleccion-nivel" | "quiz" | "seleccion-nivel-pvp" | "pvp";
+// Componentes Memorama
+import MenuPrincipalMemorama from "@/components/Juegos/MemoramaJuego/MenuMemorama";
+import SeleccionNivelMemorama from "@/components/Juegos/MemoramaJuego/SeleccionMemorama";
+import JuegoMemorama from "@/components/Juegos/MemoramaJuego/JuegoMemorama";
+
+// Menú general
+import MenuPrincipal from "@/components/Juegos/MenuPrincipal";
+
+type Pantalla =
+  | "menu-principal"
+  | "quiz-menu"
+  | "seleccion-nivel-quiz"
+  | "seleccion-nivel-pvp"
+  | "quiz"
+  | "pvp"
+  | "memorama-menu"
+  | "memorama-nivel"
+  | "memorama-juego";
+
 type Nivel = "fácil" | "medio" | "difícil" | "hard";
 
 export default function App() {
-  const [pantalla, setPantalla] = useState<Pantalla>("menu");
+  const [pantalla, setPantalla] = useState<Pantalla>("menu-principal");
   const [nivelSeleccionado, setNivelSeleccionado] = useState<Nivel | null>(null);
 
-  // --------- MANEJADORES -----------
-
-  const iniciarSolitario = () => {
-    setPantalla("seleccion-nivel");
-  };
-
-  const iniciarPvp = () => {
-    setPantalla("seleccion-nivel-pvp");
-  };
+  // --- QUIZ ---
+  const iniciarQuiz = () => setPantalla("quiz-menu");
+  const iniciarSolitario = () => setPantalla("seleccion-nivel-quiz");
+  const iniciarPvp = () => setPantalla("seleccion-nivel-pvp");
 
   const manejarNivelSolitario = (nivel: Nivel) => {
     setNivelSeleccionado(nivel);
@@ -34,44 +48,86 @@ export default function App() {
     setPantalla("pvp");
   };
 
-  const regresarAlMenu = () => {
-    setPantalla("menu");
-    setNivelSeleccionado(null);
+  // --- MEMORAMA ---
+  const iniciarMemorama = () => setPantalla("memorama-menu");
+  const manejarNivelMemorama = (nivel: Nivel) => {
+    setNivelSeleccionado(nivel);
+    setPantalla("memorama-juego");
   };
 
-  // --------- RENDER -----------
+  // --- REGRESAR ---
+  const regresarAlMenu = () => setPantalla("menu-principal");
+  const regresarAMenuQuiz = () => setPantalla("quiz-menu");
+  const regresarAMenuMemorama = () => setPantalla("memorama-menu");
 
   return (
     <SafeAreaView style={styles.container}>
-      {pantalla === "menu" && (
-        <MenuInicio onIniciar={iniciarSolitario} onIniciarPvp={iniciarPvp} />
+      {/* Menú general */}
+      {pantalla === "menu-principal" && (
+        <MenuPrincipal
+          onSeleccionar={(juego: "quiz" | "memorama") => {
+            if (juego === "quiz") iniciarQuiz();
+            if (juego === "memorama") iniciarMemorama();
+          }}
+        />
       )}
 
-      {pantalla === "seleccion-nivel" && (
+      {/* --- QUIZ --- */}
+      {pantalla === "quiz-menu" && (
+        <MenuInicio
+          onIniciar={iniciarSolitario}
+          onIniciarPvp={iniciarPvp}
+          onRegresar={regresarAlMenu}
+        />
+      )}
+
+      {pantalla === "seleccion-nivel-quiz" && (
         <SeleccionNivel
           onElegirNivel={manejarNivelSolitario}
-          onRegresar={regresarAlMenu}
+          onRegresar={regresarAMenuQuiz}
         />
       )}
 
       {pantalla === "seleccion-nivel-pvp" && (
         <SeleccionNivelPvp
           onSeleccionarNivel={manejarNivelPvp}
-          onRegresar={regresarAlMenu}
+          onRegresar={regresarAMenuQuiz}
         />
       )}
 
       {pantalla === "quiz" && nivelSeleccionado && (
         <Quiz
           nivel={nivelSeleccionado}
-          onRegresar={regresarAlMenu}
+          onRegresar={() => setPantalla("seleccion-nivel-quiz")}
         />
       )}
 
       {pantalla === "pvp" && nivelSeleccionado && (
         <PvPQuiz
           nivel={nivelSeleccionado}
+          onRegresar={() => setPantalla("seleccion-nivel-pvp")}
+        />
+      )}
+
+      {/* --- MEMORAMA --- */}
+      {pantalla === "memorama-menu" && (
+        <MenuPrincipalMemorama
+          onIniciar={() => setPantalla("memorama-nivel")}
           onRegresar={regresarAlMenu}
+        />
+      )}
+
+      {pantalla === "memorama-nivel" && (
+        <SeleccionNivelMemorama
+          onElegirNivel={manejarNivelMemorama}
+          onRegresar={regresarAMenuMemorama}
+        />
+      )}
+
+      {pantalla === "memorama-juego" && nivelSeleccionado && (
+        <JuegoMemorama
+          nivel={nivelSeleccionado}
+          onRegresar={() => setPantalla("memorama-nivel")}
         />
       )}
     </SafeAreaView>
