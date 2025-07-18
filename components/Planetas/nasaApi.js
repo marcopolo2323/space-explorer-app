@@ -34,3 +34,18 @@ export const nasaApiService = {
     }
   }
 };
+
+// Buscar imágenes de un planeta específico
+export async function getPlanetImages(planetName) {
+  try {
+    const response = await fetch(
+      `https://images-api.nasa.gov/search?q=${encodeURIComponent(planetName)}&media_type=image`
+    );
+    const data = await response.json();
+    // Devuelve solo las primeras 5 imágenes relevantes
+    return data.collection.items.slice(0, 5).map(item => item.links[0].href);
+  } catch (error) {
+    console.error('Error fetching planet images:', error);
+    return [];
+  }
+}

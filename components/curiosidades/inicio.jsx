@@ -1,55 +1,21 @@
+// inicio.js
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import {
-  View,
-  Text,
   FlatList,
-  StyleSheet,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
 import CuriosidadesCard from './curiosidades_card';
 import { curiosidadesData } from './curiosidades_data';
 
-const Inicio = () => {
-  const router = useRouter();
-
+const Inicio = ({ onCardPress }) => {
   const handleCardPress = (item) => {
-    console.log('Intentando navegar a:', item.screenName);
-    console.log('Con título:', item.title);
-    
-    // Como screenName ya tiene la ruta completa, no necesitamos mapeo
-    const route = item.screenName;
-    
-    console.log('✅ Navegando a ruta:', route);
-    
-    try {
-      // Método 1: Usar push con objeto (recomendado)
-      router.push({
-        pathname: route,
-        params: { 
-          title: item.title,
-          id: item.id.toString()
-        }
-      });
-    } catch (error) {
-      console.error('❌ Error con método 1:', error);
-      
-      try {
-        // Método 2: Usar string con query parameters
-        const encodedTitle = encodeURIComponent(item.title);
-        const fullRoute = `${route}?title=${encodedTitle}&id=${item.id}`;
-        console.log('🔄 Intentando ruta alternativa:', fullRoute);
-        router.push(fullRoute);
-      } catch (error2) {
-        console.error('❌ Error con método 2:', error2);
-        
-        // Método 3: Navegación básica sin parámetros
-        console.log('🔄 Usando navegación básica a:', route);
-        router.push(route);
-      }
-    }
+    console.log('Navegando internamente a:', item.screenName, 'con título:', item.title);
+    onCardPress(item);
   };
 
   const renderCard = ({ item }) => (
@@ -66,11 +32,6 @@ const Inicio = () => {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>CURIOSIDADES DEL</Text>
           <Text style={styles.headerSubtitle}>UNIVERSO</Text>
-          <View style={styles.stars}>
-            <Text style={styles.star}>✨</Text>
-            <Text style={styles.star}>⭐</Text>
-            <Text style={styles.star}>✨</Text>
-          </View>
         </View>
 
         <FlatList
@@ -85,43 +46,46 @@ const Inicio = () => {
   );
 };
 
+// Mantén los mismos estilos...
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#0a1026',
   },
   background: {
     flex: 1,
+    borderRadius: 0,
+    // Degradado sutil, el LinearGradient ya lo aplica
   },
   header: {
     alignItems: 'center',
     paddingVertical: 40,
     paddingHorizontal: 20,
+    backgroundColor: 'transparent',
+    borderRadius: 0,
+    marginHorizontal: 0,
+    // Sin sombras ni efectos
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#e0e7ff',
     textAlign: 'center',
     letterSpacing: 2,
+    // Sin sombra ni glow
   },
   headerSubtitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#a5b4fc',
     textAlign: 'center',
     letterSpacing: 2,
     marginBottom: 10,
-  },
-  stars: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: 100,
-  },
-  star: {
-    fontSize: 20,
+    // Sin sombra ni glow
   },
   listContainer: {
-    paddingBottom: 20,
+    paddingBottom: 30,
+    paddingHorizontal: 8,
   },
 });
 
