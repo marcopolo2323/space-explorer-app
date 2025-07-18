@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 20, 
   },
   textoRegresar: {
     color: "#ccc",

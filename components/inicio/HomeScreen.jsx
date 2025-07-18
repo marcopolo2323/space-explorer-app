@@ -78,16 +78,26 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    setCurrentDate(getCurrentDateTime());
     fetchAPODData();
     
-    // Actualizar la hora cada minuto
-    const interval = setInterval(() => {
+    // Actualizar la hora inmediatamente y cada minuto
+    const updateTime = () => {
       setCurrentDate(getCurrentDateTime());
-    }, 60000);
+    };
     
-    return () => clearInterval(interval);
-  }, []);
+    // Primera actualización
+    updateTime();
+    
+    // Configurar el intervalo para actualizar cada minuto
+    const interval = setInterval(updateTime, 60000);
+    
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, []); // Solo se ejecuta una vez al montar el componente
 
   const handleStartExploration = () => {
     router.push('/(tabs)/planetas');
@@ -289,7 +299,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    paddingTop: 48,
+    paddingTop: 8,
     paddingHorizontal: 24,
     paddingBottom: 18,
     backgroundColor: 'rgba(20,20,40,0.7)',
@@ -305,24 +315,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flexWrap: 'nowrap',
     width: '100%',
-},
+  },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    maxWidth: width * 0.55, // Limita el ancho del logo+nombre
-    flexShrink: 1,
+    maxWidth: width * 0.55,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 32,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   logo: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    marginRight: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
     backgroundColor: '#fff',
     borderWidth: 2,
     borderColor: '#fff',
@@ -334,14 +342,14 @@ const styles = StyleSheet.create({
   },
   appName: {
     color: '#ffffff',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
-    letterSpacing: 1.5,
+    letterSpacing: 0.5,
     textShadowColor: '#7b68ee',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 4,
-    flexShrink: 1,
-    flexWrap: 'wrap',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
   dateTime: {
     color: '#cccccc',

@@ -19,7 +19,7 @@ const CATEGORIES = [
   { label: 'Galaxias', value: 'galaxy' },
   { label: 'Nebulosas', value: 'nebula' },
   { label: 'Estrellas', value: 'star' },
-  { label: 'Universo', value: 'universe' },
+  { label: 'Astronautas', value: 'universe' },
   { label: 'Agujeros Negros', value: 'black hole' },
   { label: 'Planetas', value: 'planet' },
 ];

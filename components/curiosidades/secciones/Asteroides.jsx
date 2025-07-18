@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 24,
-    paddingTop: 48,
+    paddingTop: 45,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: STAR_COLOR,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.25)',
     position: 'absolute',
     left: 24,
-    top: 48,
+    top: 8,
     zIndex: 2,
   },
   backText: {
