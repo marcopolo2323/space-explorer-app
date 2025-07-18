@@ -1,4 +1,4 @@
-//planetas
+//inicio - home
 import HomeScreen from '../components/inicio/HomeScreen';
 
 export default function App() {

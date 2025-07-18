@@ -1,5 +1,5 @@
 // styles.jsx
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -87,8 +87,9 @@ export const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     maxWidth: 400,
-    maxHeight: '80%',
+    maxHeight: '90%',
     position: 'relative',
+    paddingBottom: 10,
   },
   closeButton: {
     position: 'absolute',
@@ -158,5 +159,26 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     lineHeight: 20,
+  },
+  planetImageIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+  },
+  galleryTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4B70DD',
+    marginBottom: 6,
+    marginLeft: 2,
+  },
+  galleryImage: {
+    width: 120,
+    height: 90,
+    borderRadius: 10,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: '#eee',
   },
 });

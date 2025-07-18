@@ -1,6 +1,6 @@
 // planetCard.jsx
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
 
 const PlanetCard = ({ planet, onPress }) => {
@@ -11,7 +11,11 @@ const PlanetCard = ({ planet, onPress }) => {
       activeOpacity={0.8}
     >
       <View style={[styles.planetCircle, { backgroundColor: planet.color }]}>
-        <Text style={styles.planetInitial}>{planet.name[0]}</Text>
+        <Image
+          source={{ uri: planet.image }}
+          style={styles.planetImageIcon}
+          resizeMode="cover"
+        />
       </View>
       <View style={styles.cardContent}>
         <Text style={styles.planetName}>{planet.name}</Text>

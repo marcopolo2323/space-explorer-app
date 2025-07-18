@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
   ActivityIndicator,
   Alert,
+  FlatList,
+  RefreshControl,
+  SafeAreaView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  RefreshControl
+  View
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useLocalSearchParams } from 'expo-router'; // ← Cambia esto
 
-const AsteroidsScreen = () => { // ← Elimina { route }
-  const { title } = useLocalSearchParams(); // ← Usa useLocalSearchParams
+const SPACE_GRADIENT = ['#0f2027', '#2c5364', '#1a2980', '#000428'];
+const STAR_COLOR = 'rgba(255,255,255,0.15)';
+
+const Asteroides = ({ title, onRegresar }) => {
   const [asteroids, setAsteroids] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   // Clave API de NASA (demo key - reemplaza con tu propia clave)
   const NASA_API_KEY = 'gRVZ1ecthz3ERGd2looBcgbrZp4h7lp20q2Zifpr';
-  
+   
   const fetchAsteroids = async () => {
     try {
       const today = new Date().toISOString().split('T')[0];
@@ -120,11 +121,17 @@ const AsteroidsScreen = () => { // ← Elimina { route }
     return (
       <SafeAreaView style={styles.container}>
         <LinearGradient
-          colors={['#6366F1', '#8B5CF6']}
+          colors={SPACE_GRADIENT}
           style={styles.background}
         >
+          <View style={styles.header}>
+            <TouchableOpacity onPress={onRegresar} style={styles.backButton}>
+              <Text style={styles.backText}>← Volver</Text>
+            </TouchableOpacity>
+            <Text style={styles.title}>{title || 'Asteroides'}</Text>
+          </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="white" />
+            <ActivityIndicator size="large" color="#0ff" />
             <Text style={styles.loadingText}>Cargando asteroides...</Text>
           </View>
         </LinearGradient>
@@ -135,10 +142,13 @@ const AsteroidsScreen = () => { // ← Elimina { route }
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#6366F1', '#8B5CF6']}
+        colors={SPACE_GRADIENT}
         style={styles.background}
       >
         <View style={styles.header}>
+          <TouchableOpacity onPress={onRegresar} style={styles.backButton}>
+            <Text style={styles.backText}>← Volver</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>{title || 'Asteroides'}</Text>
           <Text style={styles.subtitle}>
             Asteroides cercanos a la Tierra (próximos 7 días)
@@ -147,7 +157,6 @@ const AsteroidsScreen = () => { // ← Elimina { route }
             Total: {asteroids.length} asteroides
           </Text>
         </View>
-        
         <FlatList
           data={asteroids}
           renderItem={renderAsteroid}
@@ -157,7 +166,7 @@ const AsteroidsScreen = () => { // ← Elimina { route }
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="white"
+              tintColor="#0ff"
             />
           }
           ListEmptyComponent={
@@ -166,6 +175,7 @@ const AsteroidsScreen = () => { // ← Elimina { route }
               <Text style={styles.emoji}>☄️</Text>
             </View>
           }
+          showsVerticalScrollIndicator={false}
         />
       </LinearGradient>
     </SafeAreaView>
@@ -175,33 +185,64 @@ const AsteroidsScreen = () => { // ← Elimina { route }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',
   },
   background: {
     flex: 1,
+    justifyContent: 'flex-start',
   },
   header: {
-    padding: 20,
+    padding: 24,
+    paddingTop: 48,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.2)',
+    borderBottomColor: STAR_COLOR,
+    backgroundColor: 'rgba(10,10,30,0.4)',
+    shadowColor: '#0ff',
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    position: 'absolute',
+    left: 24,
+    top: 48,
+    zIndex: 2,
+  },
+  backText: {
+    color: '#0ff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fff',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 6,
+    textShadowColor: '#0ff',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: '#b3e0ff',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 6,
+    opacity: 0.85,
   },
   count: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: '#0ff',
     textAlign: 'center',
+    marginBottom: 2,
+    opacity: 0.7,
   },
   loadingContainer: {
     flex: 1,
@@ -209,20 +250,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: 'white',
+    color: '#0ff',
     marginTop: 10,
     fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
   listContainer: {
     padding: 20,
+    alignItems: 'center',
   },
   asteroidCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 15,
+    backgroundColor: 'rgba(20,30,60,0.7)',
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: STAR_COLOR,
+    width: 340,
+    shadowColor: '#0ff',
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
   },
   asteroidHeader: {
     flexDirection: 'row',
@@ -233,24 +282,34 @@ const styles = StyleSheet.create({
   asteroidName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fff',
     flex: 1,
+    textShadowColor: '#0ff',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
   hazardBadge: {
     backgroundColor: 'rgba(255, 0, 0, 0.3)',
-    color: 'white',
+    color: '#fff',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
     fontSize: 12,
     fontWeight: 'bold',
+    borderWidth: 1,
+    borderColor: '#ff0',
+    textShadowColor: '#fff',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
   asteroidDetails: {
     gap: 5,
   },
   detailText: {
     fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: '#b3e0ff',
+    marginBottom: 2,
+    opacity: 0.85,
   },
   emptyContainer: {
     flex: 1,
@@ -259,9 +318,13 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   emptyText: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 18,
+    color: '#fff',
     textAlign: 'center',
+    opacity: 0.7,
+    textShadowColor: '#0ff',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
   emoji: {
     fontSize: 60,
@@ -269,4 +332,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AsteroidsScreen;
+export default Asteroides;
