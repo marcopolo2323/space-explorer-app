@@ -1,6 +1,6 @@
 // planetCard.jsx
 import React from 'react';
-import { View, Text, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground} from 'react-native';
 import { styles } from './styles';
 
 const PlanetCard = ({ planet, onPress}) => {
