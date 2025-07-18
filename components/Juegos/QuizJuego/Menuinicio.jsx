@@ -1,14 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 
-export default function MenuInicio({ onIniciar, onIniciarPvp }) {
+export default function MenuInicio({ onIniciar, onIniciarPvp, onRegresar }) {
   return (
+    
     <ImageBackground
       source={require("../../../assets/Img/universo.jpg")}
-      style={styles.fondo}
+      style={styles.fondo} 
       resizeMode="cover"
     >
       <View style={styles.container}>
+      <TouchableOpacity style={styles.botonRegresar} onPress={onRegresar}>
+            <Text style={styles.textoRegresar}>← Volver</Text>
+          </TouchableOpacity>
         <Text style={styles.titulo}>BIENVENIDO AL QUIZ</Text>
 
         <TouchableOpacity style={styles.boton} onPress={onIniciar}>
@@ -54,5 +58,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+  },
+  botonRegresar: {
+    alignSelf: "flex-start",
+    backgroundColor: "#ddd",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 20,
   },
 });

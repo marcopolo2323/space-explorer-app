@@ -1,17 +1,30 @@
 // planetModal.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
   Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { styles } from './styles';
 import DetailRow from './detailRow';
+import { getPlanetImages } from './nasaApi';
+import { styles } from './styles';
 
 const PlanetModal = ({ planet, visible, onClose }) => {
+  const [planetImages, setPlanetImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    if (visible && planet) {
+      getPlanetImages(planet.name).then(setPlanetImages);
+    } else {
+      setPlanetImages([]);
+      setSelectedImage(null);
+    }
+  }, [visible, planet]);
+
   if (!planet) return null;
 
   return (
@@ -20,7 +33,7 @@ const PlanetModal = ({ planet, visible, onClose }) => {
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
-    >
+    > 
       <View style={styles.modalOverlay}>
         <TouchableOpacity
           style={styles.modalBackground}
@@ -41,6 +54,24 @@ const PlanetModal = ({ planet, visible, onClose }) => {
               style={styles.planetImage}
               resizeMode="cover"
             />
+
+            {/* Galería de imágenes de la NASA */}
+            {planetImages.length > 0 && (
+              <>
+                <Text style={styles.galleryTitle}>Imágenes de la NASA</Text>
+                <ScrollView horizontal style={{ marginVertical: 10 }} showsHorizontalScrollIndicator={false}>
+                  {planetImages.map((img, idx) => (
+                    <TouchableOpacity key={idx} onPress={() => setSelectedImage(img)}>
+                      <Image
+                        source={{ uri: img }}
+                        style={styles.galleryImage}
+                        resizeMode="cover"
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </>
+            )}
             
             <Text style={[styles.modalTitle, { color: planet.color }]}>
               {planet.name}
@@ -64,6 +95,29 @@ const PlanetModal = ({ planet, visible, onClose }) => {
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
+
+      {/* Modal para mostrar la imagen en grande */}
+      <Modal
+        visible={!!selectedImage}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSelectedImage(null)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity
+            style={{ position: 'absolute', top: 40, right: 30, zIndex: 2, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 20, padding: 8 }}
+            onPress={() => setSelectedImage(null)}
+          >
+            <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold' }}>✕</Text>
+          </TouchableOpacity>
+          {selectedImage && (
+            <Image
+              source={{ uri: selectedImage }}
+              style={{ width: '90%', height: '70%', borderRadius: 18, resizeMode: 'contain' }}
+            />
+          )}
+        </View>
+      </Modal>
     </Modal>
   );
 };
