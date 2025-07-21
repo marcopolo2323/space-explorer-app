@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ImageBackground,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 export default function MenuPrincipal({ onSeleccionar }) {
@@ -35,6 +35,16 @@ export default function MenuPrincipal({ onSeleccionar }) {
           <Text style={styles.botonTitulo}>🪐 MEMORAMA GALÁCTICO</Text>
           <Text style={styles.botonTexto}>
             Mejora tu memoria con cartas del espacio.
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.boton}
+          onPress={() => onSeleccionar("gusano")}
+        >
+          <Text style={styles.botonTitulo}>🌠 GUSANO GALÁCTICO</Text>
+          <Text style={styles.botonTexto}>
+            Devora planetas y crece en el espacio.
           </Text>
         </TouchableOpacity>
       </View>

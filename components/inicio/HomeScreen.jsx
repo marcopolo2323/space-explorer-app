@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { NASA_API_KEY, translateText } from '../../config/api_keys';
 
 import {
   ActivityIndicator,
@@ -22,9 +23,6 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-// Configura tu API key de NASA aquí
-const NASA_API_KEY = 'gRVZ1ecthz3ERGd2looBcgbrZp4h7lp20q2Zifpr'; // Reemplaza con tu API key real
-
 // Mueve esta función fuera del componente para evitar redefiniciones
 function getCurrentDateTime() {
   const now = new Date();
@@ -40,7 +38,33 @@ export default function HomeScreen() {
   const [apodData, setApodData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(getCurrentDateTime());
-  const [modalVisible, setModalVisible] = useState(false); // <-- nuevo estado
+  const [modalVisible, setModalVisible] = useState(false);
+  const [translatedTitle, setTranslatedTitle] = useState('');
+  const [translatedExplanation, setTranslatedExplanation] = useState('');
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // Función para traducir el contenido
+  const translateContent = async (data) => {
+    if (!data || !data.title || !data.explanation) return;
+    
+    setIsTranslating(true);
+    try {
+      const [translatedTitleText, translatedExplanationText] = await Promise.all([
+        translateText(data.title),
+        translateText(data.explanation)
+      ]);
+      
+      setTranslatedTitle(translatedTitleText);
+      setTranslatedExplanation(translatedExplanationText);
+    } catch (error) {
+      console.error('Error en la traducción:', error);
+      // Si hay error, usamos el texto original
+      setTranslatedTitle(data.title);
+      setTranslatedExplanation(data.explanation);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   // Función para obtener datos de APOD (Astronomy Picture of the Day)
   const fetchAPODData = async () => {
@@ -56,6 +80,8 @@ export default function HomeScreen() {
       
       const data = await response.json();
       setApodData(data);
+      // Iniciar traducción después de obtener los datos
+      await translateContent(data);
     } catch (error) {
       console.error('Error fetching NASA APOD:', error);
       Alert.alert(
@@ -65,13 +91,17 @@ export default function HomeScreen() {
       );
       
       // Datos de fallback
-      setApodData({
+      const fallbackData = {
         title: 'Nebulosa de Orión',
         explanation: 'Una de las nebulosas más brillantes y fotografiadas del cielo nocturno, ubicada en la constelación de Orión. Esta región de formación estelar activa contiene estrellas jóvenes y calientes que iluminan el gas y polvo circundante.',
         url: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=250&fit=crop',
         date: new Date().toISOString().split('T')[0],
         media_type: 'image'
-      });
+      };
+      
+      setApodData(fallbackData);
+      setTranslatedTitle(fallbackData.title);
+      setTranslatedExplanation(fallbackData.explanation);
     } finally {
       setLoading(false);
     }
@@ -108,7 +138,7 @@ export default function HomeScreen() {
   };
 
   // Función para truncar texto largo
-  const truncateText = (text, maxLength = 200) => {
+  const truncateText = (text, maxLength = 100) => {
     if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + '...';
@@ -199,7 +229,7 @@ export default function HomeScreen() {
               {/* Image Label */}
               <View style={styles.imageLabel}>
                 <Text style={styles.imageLabelText}>
-                  {apodData && apodData.title ? apodData.title.toLowerCase() : 'imagen del día de nasa'}
+                  {isTranslating ? 'Traduciendo...' : (translatedTitle || (apodData && apodData.title ? apodData.title.toLowerCase() : 'imagen del día de nasa'))}
                 </Text>
                 <Text style={styles.imageDateText}>NASA APOD - {apodData && apodData.date ? apodData.date : ''}</Text>
               </View>
@@ -209,16 +239,17 @@ export default function HomeScreen() {
             <View style={styles.descriptionContainer}>
               <Text style={styles.descriptionTitle}>Descripción NASA:</Text>
               <Text style={styles.descriptionText}>
-                {apodData && apodData.explanation 
-                  ? truncateText(apodData.explanation)
-                  : 'Cargando descripción de NASA...'
+                {isTranslating 
+                  ? 'Traduciendo...' 
+                  : truncateText(translatedExplanation || (apodData?.explanation || 'Cargando descripción de NASA...'), 100)
                 }
               </Text>
-              {apodData && apodData.explanation && apodData.explanation.length > 200 && (
+              {/* Mostrar "Leer más" basado en el texto que realmente se está usando */}
+              {!isTranslating && (translatedExplanation || apodData?.explanation) && (translatedExplanation || apodData?.explanation).length > 100 && (
                 <TouchableOpacity onPress={() => {
                   Alert.alert(
-                    apodData.title,
-                    apodData.explanation,
+                    translatedTitle || apodData?.title || 'Información NASA',
+                    translatedExplanation || apodData?.explanation || 'Sin descripción disponible',
                     [{ text: 'Cerrar' }]
                   );
                 }}>

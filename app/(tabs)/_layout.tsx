@@ -1,57 +1,6 @@
 // app/(tabs)/_layout.tsx (layout de las tabs)
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { View } from 'react-native';
-
-// Interfaz para las props de los íconos
-interface IconProps {
-  color: string;
-  size: number;
-}
-
-// Componentes de íconos simples con tipos
-const PlanetIcon = ({ color, size }: IconProps) => (
-  <View
-    style={{
-      width: size,
-      height: size,
-      borderRadius: size / 2,
-      backgroundColor: color,
-      borderWidth: 2,
-      borderColor: color,
-    }}
-  />
-);
-
-const StarIcon = ({ color, size }: IconProps) => (
-  <View
-    style={{
-      width: 0,
-      height: 0,
-      backgroundColor: 'transparent',
-      borderStyle: 'solid',
-      borderTopWidth: size * 0.4,
-      borderRightWidth: size * 0.15,
-      borderBottomWidth: size * 0.4,
-      borderLeftWidth: size * 0.15,
-      borderTopColor: color,
-      borderRightColor: 'transparent',
-      borderBottomColor: color,
-      borderLeftColor: 'transparent',
-      transform: [{ rotate: '35deg' }],
-    }}
-  />
-);
-
-const GameIcon = ({ color, size }: IconProps) => (
-  <View
-    style={{
-      width: size,
-      height: size,
-      backgroundColor: color,
-      borderRadius: 4,
-    }}
-  />
-);
 
 export default function TabsLayout() {
   return (
@@ -80,7 +29,7 @@ export default function TabsLayout() {
         options={{
           title: 'Planetas',
           tabBarIcon: ({ color, size }) => (
-            <PlanetIcon color={color} size={size} />
+            <MaterialCommunityIcons name="earth" size={size + 4} color={color} />
           ),
         }}
       />
@@ -89,7 +38,7 @@ export default function TabsLayout() {
         options={{
           title: 'Curiosidades',
           tabBarIcon: ({ color, size }) => (
-            <StarIcon color={color} size={size} />
+            <MaterialCommunityIcons name="telescope" size={size + 4} color={color} />
           ),
         }}
       />
@@ -98,7 +47,7 @@ export default function TabsLayout() {
         options={{
           title: 'Minijuegos',
           tabBarIcon: ({ color, size }) => (
-            <GameIcon color={color} size={size} />
+            <MaterialCommunityIcons name="rocket" size={size + 4} color={color} />
           ),
         }}
       />

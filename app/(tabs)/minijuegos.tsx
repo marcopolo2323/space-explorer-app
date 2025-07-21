@@ -3,15 +3,19 @@ import { SafeAreaView, StyleSheet } from "react-native";
 
 // Componentes Quiz
 import MenuInicio from "@/components/Juegos/QuizJuego/Menuinicio";
-import SeleccionNivel from "@/components/Juegos/QuizJuego/seleccionnivel";
-import SeleccionNivelPvp from "@/components/Juegos/QuizJuego/SeleccionNivelPvP";
 import Quiz from "@/components/Juegos/QuizJuego/Quiz";
 import PvPQuiz from "@/components/Juegos/QuizJuego/Quizversus";
+import SeleccionNivel from "@/components/Juegos/QuizJuego/seleccionnivel";
+import SeleccionNivelPvp from "@/components/Juegos/QuizJuego/SeleccionNivelPvP";
 
 // Componentes Memorama
+import JuegoMemorama from "@/components/Juegos/MemoramaJuego/JuegoMemorama";
 import MenuPrincipalMemorama from "@/components/Juegos/MemoramaJuego/MenuMemorama";
 import SeleccionNivelMemorama from "@/components/Juegos/MemoramaJuego/SeleccionMemorama";
-import JuegoMemorama from "@/components/Juegos/MemoramaJuego/JuegoMemorama";
+
+// Componentes Gusano Galáctico
+import GusanoGalactusGame from "@/components/Juegos/gusanoJuego/GameGusano";
+import MenuGusano from "@/components/Juegos/gusanoJuego/menugusano";
 
 // Menú general
 import MenuPrincipal from "@/components/Juegos/MenuPrincipal";
@@ -25,11 +29,13 @@ type Pantalla =
   | "pvp"
   | "memorama-menu"
   | "memorama-nivel"
-  | "memorama-juego";
+  | "memorama-juego"
+  | "gusano-menu"
+  | "gusano-juego";
 
 type Nivel = "fácil" | "medio" | "difícil" | "hard";
 
-export default function App() {
+function MinijuegosScreen() {
   const [pantalla, setPantalla] = useState<Pantalla>("menu-principal");
   const [nivelSeleccionado, setNivelSeleccionado] = useState<Nivel | null>(null);
 
@@ -55,6 +61,9 @@ export default function App() {
     setPantalla("memorama-juego");
   };
 
+  // --- GUSANO GALÁCTICO ---
+  const iniciarGusano = () => setPantalla("gusano-menu");
+
   // --- REGRESAR ---
   const regresarAlMenu = () => setPantalla("menu-principal");
   const regresarAMenuQuiz = () => setPantalla("quiz-menu");
@@ -65,9 +74,10 @@ export default function App() {
       {/* Menú general */}
       {pantalla === "menu-principal" && (
         <MenuPrincipal
-          onSeleccionar={(juego: "quiz" | "memorama") => {
+          onSeleccionar={(juego: "quiz" | "memorama" | "gusano") => {
             if (juego === "quiz") iniciarQuiz();
             if (juego === "memorama") iniciarMemorama();
+            if (juego === "gusano") iniciarGusano();
           }}
         />
       )}
@@ -130,6 +140,20 @@ export default function App() {
           onRegresar={() => setPantalla("memorama-nivel")}
         />
       )}
+
+      {/* --- GUSANO GALÁCTICO --- */}
+      {pantalla === "gusano-menu" && (
+        <MenuGusano
+          onIniciar={() => setPantalla("gusano-juego")}
+          onRegresar={regresarAlMenu}
+        />
+      )}
+
+      {pantalla === "gusano-juego" && (
+        <GusanoGalactusGame
+          onRegresar={() => setPantalla("gusano-menu")}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -139,3 +163,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default MinijuegosScreen;
