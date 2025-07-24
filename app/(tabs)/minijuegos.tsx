@@ -3,23 +3,24 @@ import { SafeAreaView, StyleSheet } from "react-native";
 
 // Componentes Quiz
 import MenuInicio from "@/components/Juegos/QuizJuego/Menuinicio";
-import Quiz from "@/components/Juegos/QuizJuego/Quiz";
-import PvPQuiz from "@/components/Juegos/QuizJuego/Quizversus";
 import SeleccionNivel from "@/components/Juegos/QuizJuego/seleccionnivel";
 import SeleccionNivelPvp from "@/components/Juegos/QuizJuego/SeleccionNivelPvP";
+import Quiz from "@/components/Juegos/QuizJuego/Quiz";
+import PvPQuiz from "@/components/Juegos/QuizJuego/Quizversus";
 
 // Componentes Memorama
-import JuegoMemorama from "@/components/Juegos/MemoramaJuego/JuegoMemorama";
 import MenuPrincipalMemorama from "@/components/Juegos/MemoramaJuego/MenuMemorama";
 import SeleccionNivelMemorama from "@/components/Juegos/MemoramaJuego/SeleccionMemorama";
+import JuegoMemorama from "@/components/Juegos/MemoramaJuego/JuegoMemorama";
 
-// Componentes Gusano Galáctico
-import GusanoGalactusGame from "@/components/Juegos/gusanoJuego/GameGusano";
+// Gusano Galáctico
+import GusanoGame from "@/components/Juegos/gusanoJuego/GameGusano";
 import MenuGusano from "@/components/Juegos/gusanoJuego/menugusano";
 
-// Menú general
+// Menú principal
 import MenuPrincipal from "@/components/Juegos/MenuPrincipal";
 
+// Tipos
 type Pantalla =
   | "menu-principal"
   | "quiz-menu"
@@ -30,19 +31,21 @@ type Pantalla =
   | "memorama-menu"
   | "memorama-nivel"
   | "memorama-juego"
+  | "nave-nivel"
   | "gusano-menu"
-  | "gusano-juego";
+  | "gusano";
 
 type Nivel = "fácil" | "medio" | "difícil" | "hard";
 
-function MinijuegosScreen() {
+export default function App() {
   const [pantalla, setPantalla] = useState<Pantalla>("menu-principal");
   const [nivelSeleccionado, setNivelSeleccionado] = useState<Nivel | null>(null);
 
-  // --- QUIZ ---
+  // QUIZ
   const iniciarQuiz = () => setPantalla("quiz-menu");
   const iniciarSolitario = () => setPantalla("seleccion-nivel-quiz");
   const iniciarPvp = () => setPantalla("seleccion-nivel-pvp");
+
 
   const manejarNivelSolitario = (nivel: Nivel) => {
     setNivelSeleccionado(nivel);
@@ -54,35 +57,40 @@ function MinijuegosScreen() {
     setPantalla("pvp");
   };
 
-  // --- MEMORAMA ---
+  // MEMORAMA
   const iniciarMemorama = () => setPantalla("memorama-menu");
   const manejarNivelMemorama = (nivel: Nivel) => {
     setNivelSeleccionado(nivel);
     setPantalla("memorama-juego");
   };
+  
+  // NAVE (no implementado)
+  const iniciarJuegoNave = () => {
+    setPantalla("nave-nivel");
+    setNivelSeleccionado("fácil");
+  };
 
-  // --- GUSANO GALÁCTICO ---
   const iniciarGusano = () => setPantalla("gusano-menu");
-
-  // --- REGRESAR ---
+  const iniciarJuegoGusano = () => setPantalla("gusano");
+  // REGRESAR
   const regresarAlMenu = () => setPantalla("menu-principal");
   const regresarAMenuQuiz = () => setPantalla("quiz-menu");
   const regresarAMenuMemorama = () => setPantalla("memorama-menu");
-
+  const regresarAMenuGusano = () => setPantalla("gusano-menu");
   return (
     <SafeAreaView style={styles.container}>
-      {/* Menú general */}
       {pantalla === "menu-principal" && (
         <MenuPrincipal
-          onSeleccionar={(juego: "quiz" | "memorama" | "gusano") => {
+          onSeleccionar={(juego: "quiz" | "memorama" | "nave" | "gusano") => {
             if (juego === "quiz") iniciarQuiz();
             if (juego === "memorama") iniciarMemorama();
+            if (juego === "nave") iniciarJuegoNave();
             if (juego === "gusano") iniciarGusano();
           }}
         />
       )}
 
-      {/* --- QUIZ --- */}
+      {/* QUIZ */}
       {pantalla === "quiz-menu" && (
         <MenuInicio
           onIniciar={iniciarSolitario}
@@ -119,7 +127,7 @@ function MinijuegosScreen() {
         />
       )}
 
-      {/* --- MEMORAMA --- */}
+      {/* MEMORAMA */}
       {pantalla === "memorama-menu" && (
         <MenuPrincipalMemorama
           onIniciar={() => setPantalla("memorama-nivel")}
@@ -141,18 +149,18 @@ function MinijuegosScreen() {
         />
       )}
 
-      {/* --- GUSANO GALÁCTICO --- */}
+      {/* GUSANO GALÁCTICO */}
       {pantalla === "gusano-menu" && (
         <MenuGusano
-          onIniciar={() => setPantalla("gusano-juego")}
+          onIniciar={iniciarJuegoGusano}
           onRegresar={regresarAlMenu}
         />
       )}
-
-      {pantalla === "gusano-juego" && (
-        <GusanoGalactusGame
-          onRegresar={() => setPantalla("gusano-menu")}
+      {pantalla === "gusano" && (
+        <GusanoGame 
+        onRegresar={regresarAMenuGusano}
         />
+        
       )}
     </SafeAreaView>
   );
@@ -163,5 +171,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default MinijuegosScreen;
