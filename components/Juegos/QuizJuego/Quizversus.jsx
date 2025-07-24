@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
+  ImageBackground,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  ImageBackground,
+  View,
 } from "react-native";
-import preguntasFacil from "../QuizJuego/Preguntas/facil";
-import preguntasMedio from "../QuizJuego/Preguntas/normal";
 import preguntasDificil from "../QuizJuego/Preguntas/dificil";
+import preguntasFacil from "../QuizJuego/Preguntas/facil";
 import preguntasHard from "../QuizJuego/Preguntas/hard";
+import preguntasMedio from "../QuizJuego/Preguntas/normal";
 
 export default function PvPQuiz({ nivel, onRegresar }) {
   const [preguntas, setPreguntas] = useState([]);
@@ -83,6 +83,11 @@ export default function PvPQuiz({ nivel, onRegresar }) {
       resizeMode="cover"
     >
       <View style={styles.tarjeta}>
+        {/* Botón de regreso siempre visible */}
+        <TouchableOpacity style={styles.botonRegreso} onPress={onRegresar}>
+          <Text style={styles.textoRegreso}>← Regresar</Text>
+        </TouchableOpacity>
+        
         {terminado ? (
           <>
             <Text style={styles.titulo}>¡Juego Terminado!</Text>
@@ -176,5 +181,17 @@ const styles = StyleSheet.create({
   },
   incorrecta: {
     backgroundColor: "#dc3545",
+  },
+  botonRegreso: {
+    position: 'absolute',
+    top: -40,
+    left: 20,
+    backgroundColor: "#5c2fd499",
+    padding: 8,
+    borderRadius: 8,
+  },
+  textoRegreso: {
+    color: "white",
+    fontSize: 16,
   },
 });

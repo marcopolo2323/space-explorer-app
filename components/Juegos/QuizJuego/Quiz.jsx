@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   botonRegresar: {
     alignSelf: 'flex-start',
     marginBottom: 10,
-    backgroundColor: '#444',
+    backgroundColor: '#5c2fd499',
     paddingHorizontal: 16,
     paddingVertical: 6,
     borderRadius: 20,

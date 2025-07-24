@@ -237,14 +237,14 @@ const styles = StyleSheet.create({
   },
   botonRegresar: {
     alignSelf: "flex-start",
-    backgroundColor: "#444",
+    backgroundColor: "#5c2fd499",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     marginBottom: 20, 
   },
   textoRegresar: {
-    color: "#ccc",
+    color: "#fff",
     fontSize: 16,
     fontWeight: "500",
   },

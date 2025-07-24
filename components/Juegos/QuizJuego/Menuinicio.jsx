@@ -11,7 +11,7 @@ export default function MenuInicio({ onIniciar, onIniciarPvp, onRegresar }) {
     >
       <View style={styles.container}>
       <TouchableOpacity style={styles.botonRegresar} onPress={onRegresar}>
-            <Text style={styles.textoRegresar}>← Volver</Text>
+            <Text style={styles.textoRegresar}>← Regresar</Text>
           </TouchableOpacity>
         <Text style={styles.titulo}>BIENVENIDO AL QUIZ</Text>
 
@@ -61,10 +61,14 @@ const styles = StyleSheet.create({
   },
   botonRegresar: {
     alignSelf: "flex-start",
-    backgroundColor: "#ddd",
+    backgroundColor: "#5c2fd499",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     marginBottom: 20,
+  },
+  textoRegresar: {
+    color: "white",
+    fontSize: 14,
   },
 });
