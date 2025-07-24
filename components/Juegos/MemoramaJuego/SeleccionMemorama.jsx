@@ -12,13 +12,13 @@ export default function SeleccionNivelMemorama({ onElegirNivel, onRegresar }) {
 
   return (
     <ImageBackground
-      source={require("../../../assets/Img/universo.jpg")}
+      source={require("@/components/Juegos/gusanoJuego/img/cosmo.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.botonRegresar} onPress={onRegresar}>
-          <Text style={styles.textoRegresar}>← Volver</Text>
+      <View style={styles.card}>
+        <TouchableOpacity style={styles.volver} onPress={onRegresar}>
+          <Text style={styles.volverTexto}>← Volver al selector</Text>
         </TouchableOpacity>
 
         <Text style={styles.titulo}>🪐 Selecciona un Nivel</Text>
@@ -43,11 +43,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width:'100%'
   },
-  container: {
-    backgroundColor: "rgba(0,0,0,0.65)",
+  card: {
+    backgroundColor: "transparent", // 💫 sin opacidad oscura
     padding: 30,
-    borderRadius: 20,
+    borderRadius: 24,
     width: "85%",
     alignItems: "center",
   },
@@ -55,13 +56,16 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "bold",
     color: "#ffffff",
-    marginBottom: 6,
+    marginBottom: 8,
     textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
   subtitulo: {
     fontSize: 16,
     color: "#ccc",
-    marginBottom: 20,
+    marginBottom: 24,
     textAlign: "center",
   },
   boton: {
@@ -72,10 +76,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: "100%",
     alignItems: "center",
-    shadowColor: "#fff",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
     elevation: 3,
   },
   texto: {
@@ -83,17 +87,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-  botonRegresar: {
+  volver: {
     alignSelf: "flex-start",
-    backgroundColor: "#5c2fd499",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
     marginBottom: 12,
+    backgroundColor: "#222",
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
-  textoRegresar: {
-    color: "#ccc",
-    fontSize: 16,
-    fontWeight: "500",
+  volverTexto: {
+    color: "#5c2fd4",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });
