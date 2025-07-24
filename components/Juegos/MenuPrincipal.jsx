@@ -1,16 +1,16 @@
 import React from "react";
 import {
-    ImageBackground,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ImageBackground,
 } from "react-native";
 
 export default function MenuPrincipal({ onSeleccionar }) {
   return (
     <ImageBackground
-      source={require("@/assets/Img/universo.jpg")}
+      source={require("@/components/Juegos/gusanoJuego/assest/god.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
@@ -37,14 +37,14 @@ export default function MenuPrincipal({ onSeleccionar }) {
             Mejora tu memoria con cartas del espacio.
           </Text>
         </TouchableOpacity>
-
+        
         <TouchableOpacity
           style={styles.boton}
           onPress={() => onSeleccionar("gusano")}
         >
-          <Text style={styles.botonTitulo}>🌠 GUSANO GALÁCTICO</Text>
+          <Text style={styles.botonTitulo}>🌌 GUSANO CÓSMICO</Text>
           <Text style={styles.botonTexto}>
-            Devora planetas y crece en el espacio.
+            Come estrellas sin chocar contigo mismo.
           </Text>
         </TouchableOpacity>
       </View>
@@ -57,11 +57,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width: '100%',
+    height: '100%'
   },
   container: {
     width: "85%",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: "transparent",
     borderRadius: 24,
     padding: 24,
     shadowColor: "#000",
@@ -70,26 +72,30 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   titulo: {
-    color: "#fff",
-    fontSize: 26,
+    color: "#ffffff",
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 6,
+    marginBottom: 8,
     textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   subtitulo: {
-    color: "#ccc",
+    color: "#ddd",
     fontSize: 18,
-    marginBottom: 24,
+    marginBottom: 20,
     textAlign: "center",
   },
   boton: {
-    backgroundColor: "#5c2fd4",
+    backgroundColor: "#4B0082",
     borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 12,
     width: "100%",
     alignItems: "center",
+    elevation: 3,
   },
   botonTitulo: {
     fontSize: 18,
