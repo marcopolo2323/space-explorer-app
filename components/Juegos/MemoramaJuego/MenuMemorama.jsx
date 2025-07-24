@@ -10,7 +10,7 @@ import {
 export default function MenuPrincipal({ onIniciar, onRegresar }) {
   return (
     <ImageBackground
-      source={require("../../../assets/Img/universo.jpg")}
+      source={require("@/components/Juegos/gusanoJuego/img/moon.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
@@ -18,7 +18,7 @@ export default function MenuPrincipal({ onIniciar, onRegresar }) {
         <Text style={styles.textoRegresar}>← Volver</Text>
       </TouchableOpacity>
 
-      <View style={styles.container}>
+      <View style={styles.card}>
         <Text style={styles.titulo}>🧠 MEMORAMA ESPACIAL</Text>
 
         <TouchableOpacity style={styles.boton} onPress={onIniciar}>
@@ -28,19 +28,18 @@ export default function MenuPrincipal({ onIniciar, onRegresar }) {
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
   fondo: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 60,
+    width:'100%'
   },
   botonRegresar: {
     position: "absolute",
     top: 30,
     left: 20,
-    backgroundColor: "#5c2fd499",
+    backgroundColor: "rgba(255,255,255,0.2)",
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
@@ -51,8 +50,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
-  container: {
-    backgroundColor: "rgba(0,0,0,0.6)",
+  card: {
+    backgroundColor: "transparent", // 🔍 sin opacidad oscura
     padding: 30,
     borderRadius: 20,
     width: "85%",
@@ -64,6 +63,9 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 24,
     textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
   },
   boton: {
     backgroundColor: "#5c2fd4",
