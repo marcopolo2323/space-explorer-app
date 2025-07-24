@@ -20,27 +20,30 @@ const { width, height } = Dimensions.get("window");
 // Configuración de niveles
 const configNiveles = {
   fácil: {
-    data: facil,
-    columnas: 4,
-    tamañoCarta: 70 // Tamaño para 4x4
+    data: facil.slice(0, 6),     // 6 íconos → 12 cartas (3x4)
+    columnas: 3,
+    filas: 4,
+    tamañoCarta: 80,
   },
   medio: {
-    data: medio,
-    columnas: 6,
-    tamañoCarta: 50 // Tamaño para 6x6
+    data: medio.slice(0, 8),     // 8 íconos → 16 cartas (4x4)
+    columnas: 4,
+    filas: 4,
+    tamañoCarta: 70,
   },
   difícil: {
-    data: dificil,
-    columnas: 8,
-    tamañoCarta: 40 // Tamaño para 8x8
+    data: dificil.slice(0, 12),  // 12 íconos → 24 cartas (6x4)
+    columnas: 6,
+    filas: 4,
+    tamañoCarta: 60,
   },
   hard: {
-    data: hard,
-    columnas: 12,
-    tamañoCarta: 30 // Tamaño para 12x12
-  }
+    data: hard.slice(0, 32),     // 32 íconos → 64 cartas (8x8)
+    columnas: 8,
+    filas: 8,
+    tamañoCarta: 38,
+  },
 };
-
 export default function JuegoMemorama({ nivel, onRegresar }) {
   const [cartas, setCartas] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
@@ -94,11 +97,13 @@ export default function JuegoMemorama({ nivel, onRegresar }) {
 
   // Estilos dinámicos basados en el nivel
   const getGridStyles = () => {
-    return {
-      width: configActual.columnas * (configActual.tamañoCarta + 10),
-      maxWidth: width * 0.95,
-    };
+  return {
+    width: configActual.columnas * (configActual.tamañoCarta + 10),
+    height: configActual.filas * (configActual.tamañoCarta + 10),
+    maxWidth: width * 0.95,
   };
+};
+
 
   const getCartaStyles = () => {
     return {
@@ -110,7 +115,7 @@ export default function JuegoMemorama({ nivel, onRegresar }) {
 
   return (
     <ImageBackground
-      source={require("../../../assets/Img/universo.jpg")}
+      source={require("@/components/Juegos/gusanoJuego/img/milky.jpg")}
       style={styles.fondo}
       resizeMode="cover"
     >
@@ -173,79 +178,87 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   contenedor: {
-    backgroundColor: "rgba(0,0,0,0.65)",
+    backgroundColor: 'transparent',
     padding: 20,
     borderRadius: 20,
     width: '90%',
     maxWidth: 500,
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 10,
   },
   titulo: {
     fontSize: 26,
-    fontWeight: "bold",
-    color: "#ffffff",
+    fontWeight: 'bold',
+    color: '#fff',
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 4,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   carta: {
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: '#1a1a1a',
-    elevation: 5,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0f0f0f',
+    shadowColor: '#5c2fd4',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 3,
   },
   oculta: {
-    backgroundColor: "#5c2fd4",
+    backgroundColor: '#5c2fd4',
   },
   volteada: {
-    backgroundColor: "#28a745",
+    backgroundColor: '#28a745',
   },
   textoCarta: {
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   resultado: {
     marginTop: 20,
-    alignItems: "center",
+    alignItems: 'center',
     width: '100%',
   },
   boton: {
-    backgroundColor: "#5c2fd4",
+    backgroundColor: '#5c2fd4',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     marginVertical: 8,
     width: '100%',
-    alignItems: "center",
-    shadowColor: "#fff",
-    shadowOffset: { width: 0, height: 2 },
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 6,
     elevation: 3,
   },
   textoBoton: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   botonRegresar: {
-    alignSelf: "flex-start",
-    backgroundColor: "#5c2fd499",
+    alignSelf: 'flex-start',
+    backgroundColor: '#222',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    marginBottom: 20, 
+    marginBottom: 20,
   },
   textoRegresar: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "500",
+    color: '#5c2fd4',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
